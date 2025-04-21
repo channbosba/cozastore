@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export const FetchProducts = async () => {
     try {
-        const response = await axios.get('http://localhost:3010/product/getproducts/');
+        const response = await axios.get('http://localhost:8000/products');
         return response.data.products || []; //  Return product list directly
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -17,7 +17,7 @@ export const useCategories = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get("http://localhost:3010/category/getcategories?limit=10&page=1");
+                const response = await axios.get("http://localhost:8000/categories");
                 setCategories(response.data.categories || []);
             } catch (error) {
                 console.error("Error fetching categories:", error);
@@ -32,7 +32,7 @@ export const useCategories = () => {
 
 export const fetchProductsByName = async (name) => {
     try {
-        const response = await fetch(`http://localhost:3010/product/getproducts/${name}`);
+        const response = await fetch(`http://localhost:8000/product/getproducts/${name}`);
         if (!response.ok) throw new Error(`Failed to fetch product with name: ${name}`);
         return response.data;
     } catch (error) {

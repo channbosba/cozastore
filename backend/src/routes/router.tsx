@@ -1,24 +1,21 @@
 import { lazy, Suspense, ReactElement, PropsWithChildren } from 'react';
-import { Outlet, RouteObject, RouterProps, createBrowserRouter } from 'react-router-dom';
+import { Outlet, RouteObject, createBrowserRouter } from 'react-router-dom';
 
 import PageLoader from 'components/loading/PageLoader';
 import Splash from 'components/loading/Splash';
 import { rootPaths } from './paths';
 import paths from './paths';
 
-const App = lazy<() => ReactElement>(() => import('App'));
+// Lazy-loaded components
+const App = lazy(() => import('App'));
+const MainLayout = lazy(() => import('layouts/main-layout'));
+const AuthLayout = lazy(() => import('layouts/auth-layout'));
 
-const MainLayout = lazy<({ children }: PropsWithChildren) => ReactElement>(
-  () => import('layouts/main-layout'),
-);
-const AuthLayout = lazy<({ children }: PropsWithChildren) => ReactElement>(
-  () => import('layouts/auth-layout'),
-);
-
-const Dashboard = lazy<() => ReactElement>(() => import('pages/dashboard/Dashboard'));
-const Login = lazy<() => ReactElement>(() => import('pages/authentication/Login'));
-const SignUp = lazy<() => ReactElement>(() => import('pages/authentication/SignUp'));
-const ErrorPage = lazy<() => ReactElement>(() => import('pages/error/ErrorPage'));
+const Dashboard = lazy(() => import('pages/dashboard/Dashboard'));
+const Product = lazy(() => import('pages/product/Product'));
+const Login = lazy(() => import('pages/authentication/Login'));
+const SignUp = lazy(() => import('pages/authentication/SignUp'));
+const ErrorPage = lazy(() => import('pages/error/ErrorPage'));
 
 const routes: RouteObject[] = [
   {
@@ -40,7 +37,19 @@ const routes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Dashboard />,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <Dashboard />
+              </Suspense>
+            ),
+          },
+          {
+            path: paths.product,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <Product />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -56,11 +65,19 @@ const routes: RouteObject[] = [
         children: [
           {
             path: paths.login,
-            element: <Login />,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <Login />
+              </Suspense>
+            ),
           },
           {
             path: paths.signup,
-            element: <SignUp />,
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <SignUp />
+              </Suspense>
+            ),
           },
         ],
       },
@@ -68,14 +85,17 @@ const routes: RouteObject[] = [
   },
   {
     path: '*',
-    element: <ErrorPage />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <ErrorPage />
+      </Suspense>
+    ),
   },
 ];
 
-const options: { basename: string } = {
+// Router with basename
+const router = createBrowserRouter(routes, {
   basename: '/nickelfox',
-};
-
-const router: Partial<RouterProps> = createBrowserRouter(routes, options);
+});
 
 export default router;

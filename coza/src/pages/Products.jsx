@@ -82,7 +82,9 @@ const Products = () => {
                   <div className="block2">
                     <div className="block2-pic hov-img0">
                       <img
-                        src={`http://localhost:3010/uploads/products/${product.photo}`}
+                        // src={`http://localhost:3010/uploads/products/${product.photo}`}
+                        // alt={product.name}
+                        src={`http://localhost:8000/products/${product.photo}`}
                         alt={product.name}
                         style={{
                           width: "90%",
@@ -129,7 +131,7 @@ const Products = () => {
                 <div className="row">
                   <div className="col-md-6">
                     <img
-                      src={`http://localhost:3010/uploads/products/${selectedProduct.photo}`}
+                      src={`http://localhost:8000/uploads/products/${selectedProduct.photo}`}
                       alt={selectedProduct.name}
                       style={{
                         width: "300px",
